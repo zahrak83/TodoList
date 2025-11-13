@@ -1,0 +1,65 @@
+﻿@model ToDoList.Domain.Core.Dtos.CreateToDoItemDto
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "افزودن کار جدید";
+}
+
+<style>
+    .form-card {
+        background-color: #fff;
+        border-radius: 20px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        padding: 50px;
+        text-align: center;
+    }
+
+    .form-row {
+        display: flex;
+        gap: 15px; /* فاصله بین دو فیلد */
+    }
+
+    .form-group.half {
+        flex: 1; /* هر کدوم نصف عرض کل فرم بشن */
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 8px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+    }
+</style>
+
+<div class="form-card">
+    <div class="form-title">افزودن کار جدید</div>
+
+    <form asp-action="Create" method="post">
+        <div class="form-group">
+            <label>عنوان:</label>
+            <input asp-for="Title" required />
+        </div>
+
+        <div class="form-group">
+            <label>توضیحات:</label>
+            <textarea asp-for="Description"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>تاریخ سررسید:</label>
+            <input asp-for="DueDate" type="date" />
+        </div>
+
+        <div class="form-row">
+            <div class ="form-group half">
+            <label>دسته‌بندی:</label>
+            <select asp-for="CategoryId" asp-items="@(new SelectList(ViewBag.Categories, "Id", "Name"))"></select>
+        </div>
+
+            <div class="form-group half">
+            <label>وضعیت:</label>
+            <select asp-for="Status" asp-items="Html.GetEnumSelectList<ToDoList.Domain.Core.Enums.ToDoStatus>()"></select>
+        </div>
+        </div>
+        <button type="submit">ثبت کار</button>
+    </form>
+</div>

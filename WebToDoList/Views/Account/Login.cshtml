@@ -1,0 +1,142 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "ورود به حساب";
+}
+
+<style>
+    body {
+        background-color: #ffe4e1; /* پس‌زمینه‌ی صورتی ملایم */
+        font-family: "Vazirmatn", sans-serif;
+    }
+
+    .login-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 85vh;
+    }
+
+    .login-card {
+        background-color: #fff;
+        width: 300px;
+        border-radius: 20px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        padding:80px;
+        text-align: center;
+        transition: transform 0.2s ease-in-out;
+    }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .login-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #f77f7f;
+        margin-bottom: 10px;
+    }
+
+    .login-subtitle {
+        color: #888;
+        margin-bottom: 30px;
+    }
+
+    form {
+        text-align: right;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 500;
+        color: #555;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px 9px;
+        border: 1px solid #fcb6b6; 
+        background-color: #fff0f0; 
+        border-radius: 8px;
+        font-size: 1rem;
+        outline: none;
+        transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
+        margin-bottom: 20px;
+        color: #444;
+    }
+
+        input:focus {
+            border-color: #f77f7f;
+            box-shadow: 0 0 6px rgba(247, 127, 127, 0.4);
+            background-color: #ffe9e9;
+        }
+
+        input:-webkit-autofill,
+        input:-webkit-autofill:focus {
+            -webkit-box-shadow: 0 0 0px 1000px #fff0f0 inset !important;
+            box-shadow: 0 0 0px 1000px #fff0f0 inset !important;
+            border: 1px solid #fcb6b6 !important;
+            -webkit-text-fill-color: #444 !important;
+            transition: background-color 0s ease-in-out 0s;
+        }
+
+    button {
+        background-color: #f77f7f;
+        color: white;
+        border: none;
+        width: 100%;
+        padding: 12px;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+        button:hover {
+            background-color: #f45c5c;
+        }
+
+    .link {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+        .link a {
+            color: #f77f7f;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+            .link a:hover {
+                text-decoration: underline;
+            }
+</style>
+
+<div class="login-wrapper">
+    <div class="login-card">
+        <div class="login-title">Welcome to ToDo List</div>
+        <div class="login-subtitle">ورود به حساب</div>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="error">@ViewBag.Error</div>
+        }
+
+        <form asp-action="Login" method="post" autocomplete="off">
+            <label>شماره موبایل:</label>
+            <input type="text" name="mobile" required autocomplete="off" />
+
+            <label>رمز عبور:</label>
+            <input type="password" name="password" required autocomplete="new-password" />
+
+            <button type="submit">ورود</button>
+        </form>
+
+
+        <div class="link">
+            <a asp-action="Register">ثبت‌نام</a>
+        </div>
+    </div>
+</div>
