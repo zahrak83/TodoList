@@ -25,7 +25,8 @@ namespace ToDoList.Infra.Repo
                     Description = t.Description,
                     DueDate = t.DueDate,
                     Status = t.Status,
-                    CategoryName = t.Category!.Name
+                    CategoryName = t.Category!.Name,
+                    IsOverdue = t.DueDate.HasValue && t.DueDate < DateTime.Today
                 })
                 .ToList();
         }
@@ -41,7 +42,8 @@ namespace ToDoList.Infra.Repo
                     Description = t.Description,
                     DueDate = t.DueDate,
                     Status = t.Status,
-                    CategoryName = t.Category!.Name
+                    CategoryName = t.Category!.Name,
+                    IsOverdue = t.DueDate.HasValue && t.DueDate < DateTime.Today
                 })
                 .FirstOrDefault();
         }
@@ -55,7 +57,7 @@ namespace ToDoList.Infra.Repo
                 DueDate = dto.DueDate,
                 CategoryId = dto.CategoryId,
                 UserId = dto.UserId,
-                Status = ToDoStatus.NotDone
+                Status = dto.Status
             };
 
             _context.toDoItems.Add(entity);
@@ -68,7 +70,8 @@ namespace ToDoList.Infra.Repo
                 Description = entity.Description,
                 DueDate = entity.DueDate,
                 Status = entity.Status,
-                CategoryName = _context.categories.FirstOrDefault(c => c.Id == entity.CategoryId)?.Name
+                CategoryName = _context.categories.FirstOrDefault(c => c.Id == entity.CategoryId)?.Name,
+                IsOverdue = entity.DueDate.HasValue && entity.DueDate < DateTime.Today
             };
         }
 
@@ -93,7 +96,9 @@ namespace ToDoList.Infra.Repo
                 Description = entity.Description,
                 DueDate = entity.DueDate,
                 Status = entity.Status,
-                CategoryName = categoryName
+                CategoryName = categoryName,
+                IsOverdue = entity.DueDate.HasValue && entity.DueDate < DateTime.Today
+
             };
         }
 
@@ -114,7 +119,6 @@ namespace ToDoList.Infra.Repo
                 .Where(t => t.UserId == userId)
                 .AsQueryable();
 
-            // ---------- جستجو ----------
             if (!string.IsNullOrWhiteSpace(search))
             {
                 search = search.ToLower();
@@ -124,7 +128,6 @@ namespace ToDoList.Infra.Repo
                 );
             }
 
-            // ---------- مرتب‌سازی ----------
             query = sort switch
             {
                 "title" => query.OrderBy(t => t.Title),
@@ -140,7 +143,8 @@ namespace ToDoList.Infra.Repo
                 Description = t.Description,
                 DueDate = t.DueDate,
                 Status = t.Status,
-                CategoryName = t.Category!.Name
+                CategoryName = t.Category!.Name,
+                IsOverdue = t.DueDate.HasValue && t.DueDate < DateTime.Today
             }).ToList();
         }
 

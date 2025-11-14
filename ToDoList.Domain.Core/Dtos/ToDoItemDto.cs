@@ -10,5 +10,6 @@ namespace ToDoList.Domain.Core.Dtos
         public DateTime? DueDate { get; set; }
         public ToDoStatus Status { get; set; }
         public string? CategoryName { get; set; }
+        public bool IsOverdue { get; set; }
     }
 }

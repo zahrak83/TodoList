@@ -227,26 +227,17 @@
         {
             string statusClass = "";
 
-            bool isOverdue = item.DueDate.HasValue && item.DueDate.Value < DateTime.Today;
-
             if (item.Status == ToDoStatus.Done)
             {
-                // انجام شده = همیشه سبز
                 statusClass = "status-done";
             }
             else if (item.Status == ToDoStatus.Inprogress)
             {
-                if (isOverdue)
-                    statusClass = "status-overdue";   // آبی → قرمز تغییر می‌کنه چون زمان گذشته
-                else
-                    statusClass = "status-inprogress";  // آبی
+                statusClass = item.IsOverdue ? "status-overdue" : "status-inprogress";
             }
             else // NotDone
             {
-                if (isOverdue)
-                    statusClass = "status-overdue";     // قرمز
-                else
-                    statusClass = "";                   // بدون رنگ
+                statusClass = item.IsOverdue ? "status-overdue" : "";
             }
 
 
@@ -269,9 +260,9 @@
                     <a asp-action="Edit" asp-route-id="@item.Id">
                         <button class="task-btn edit">✏️ ویرایش</button>
                     </a>
-                    <a asp-action="Delete" asp-route-id="@item.Id">
-                        <button class="task-btn delete">🗑 حذف</button>
-                    </a>
+                    <form asp-action="Delete" asp-route-id="@item.Id" method="post" style="display:inline;">
+                        <button type="submit" class="task-btn delete">🗑 حذف</button>
+                    </form>
                 </div>
             </div>
         }
