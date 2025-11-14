@@ -107,5 +107,42 @@ namespace ToDoList.Infra.Repo
             _context.SaveChanges();
             return true;
         }
+
+        public List<ToDoItemDto> Filter(int userId, string? search, string? sort)
+        {
+            var query = _context.toDoItems
+                .Where(t => t.UserId == userId)
+                .AsQueryable();
+
+            // ---------- جستجو ----------
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.ToLower();
+                query = query.Where(t =>
+                    t.Title!.ToLower().Contains(search) ||
+                    t.Category!.Name.ToLower().Contains(search)
+                );
+            }
+
+            // ---------- مرتب‌سازی ----------
+            query = sort switch
+            {
+                "title" => query.OrderBy(t => t.Title),
+                "date" => query.OrderBy(t => t.DueDate),
+                "status" => query.OrderBy(t => t.Status),
+                _ => query.OrderBy(t => t.Id)
+            };
+
+            return query.Select(t => new ToDoItemDto
+            {
+                Id = t.Id,
+                Title = t.Title,
+                Description = t.Description,
+                DueDate = t.DueDate,
+                Status = t.Status,
+                CategoryName = t.Category!.Name
+            }).ToList();
+        }
+
     }
 }

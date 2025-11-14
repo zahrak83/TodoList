@@ -10,5 +10,7 @@ namespace ToDoList.Domain.Core.Contract.Service
         ToDoItemDto AddItem(CreateToDoItemDto dto);
         ToDoItemDto? UpdateStatus(int id, ToDoStatus status);
         bool DeleteItem(int id);
+        List<ToDoItemDto> Filter(int userId, string? search, string? sort);
+
     }
 }

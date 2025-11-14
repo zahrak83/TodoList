@@ -1,59 +1,59 @@
 ﻿@using ToDoList.Domain.Core.Enums
 @model List<ToDoList.Domain.Core.Dtos.ToDoItemDto>
+
 @{
     Layout = "_Layout";
     ViewData["Title"] = "لیست کارها";
 }
 
 <style>
+    .form-card {
+        max-width: 700px;
+        margin: 20px auto;
+        background: #fff;
+        border-radius: 16px;
+        padding: 20px 25px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    .form-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: #333;
+    }
+
     .task-item {
         display: flex;
-        align-items: stretch; 
-        justify-content: space-between;
-        border: 1px solid #fcb6b6;
-        border-radius: 12px;
+        align-items: stretch;
+        border: 1px solid #e3e3e3;
+        border-radius: 10px;
         background-color: #fff;
         margin-bottom: 15px;
-        padding: 0; 
         overflow: hidden;
-        transition: box-shadow 0.3s ease;
+        transition: box-shadow 0.3s ease, transform 0.2s ease;
     }
 
         .task-item:hover {
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
         }
 
     .task-status-bar {
         width: 8px;
-        height: auto;
-        min-height: 100%; 
-
-        margin-right: 12px; 
         flex-shrink: 0;
-        order: -1; 
+        transition: background-color 0.3s ease;
     }
 
-   
-    .status-done .task-status-bar {
-        background-color: #4CAF50; 
-    }
-    .status-inprogress .task-status-bar {
-        background-color: #2196F3; 
-    }
-    .status-overdue .task-status-bar {
-        background-color: #E53935; 
-    }
-
-   
     .task-content {
-        flex: 1; 
-        padding: 12px 10px 12px 0; 
+        flex: 1;
+        padding: 12px 16px;
         line-height: 1.6;
     }
 
         .task-content strong {
             font-size: 1.1rem;
-            color: #444;
+            color: #333;
         }
 
         .task-content small {
@@ -62,33 +62,30 @@
 
     .task-actions {
         display: flex;
-        flex-direction: row;
-        align-items: center; 
+        align-items: center;
         gap: 10px;
         padding: 0 15px;
-        flex-shrink: 0; 
+        border-right: 1px solid #eee;
+        background: #fafafa;
     }
 
     .task-btn {
-        padding: 6px 8px; 
-        width: auto;
-        min-width: 60px;
+        padding: 6px 10px;
         border: none;
         border-radius: 8px;
         cursor: pointer;
         font-size: 0.9rem;
         font-weight: 500;
-        transition: background-color 0.3s ease;
+        transition: all 0.3s ease;
         color: #fff;
     }
 
         .task-btn.edit {
-            background-color: #ffd6d6;
-            color: #444; 
+            background-color: #ffb74d;
         }
 
             .task-btn.edit:hover {
-                background-color: #fda4a4;
+                background-color: #ffa726;
             }
 
         .task-btn.delete {
@@ -98,18 +95,129 @@
             .task-btn.delete:hover {
                 background-color: #c0392b;
             }
+
+    button.add-task-btn {
+        background-color: #f77f7f;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 14px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        transition: background-color 0.3s ease;
+    }
+
+        button.add-task-btn:hover {
+            background-color: #f45c5c;
+        }
+    /* کانتینر اصلی فرم جستجو */
+    .search-container {
+        width: 100%;
+        text-align: center;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        
+    }
+
+    /* خود فرم */
+    .search-box {
+        display: inline-flex;
+        gap: 12px;
+        align-items: center;
+        background: #ffffffaa;
+        padding: 15px 25px;
+        border-radius: 20px;
+        backdrop-filter: blur(4px);
+    }
+
+        /* فیلدهای ورودی */
+        .search-box input,
+        .search-box select {
+            height: 45px !important;
+            line-height: 45px !important;
+            padding: 0 12px !important;
+            margin: 0 !important;
+            border-radius: 10px;
+            font-size: 15px;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            border: 1px solid #fcb6b6;
+            background-color: #fff0f0;
+            color: #444;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+            /* فوکوس زیبا */
+            .search-box input:focus,
+            .search-box select:focus {
+                border-color: #ff6f6f;
+                box-shadow: 0 0 5px #ffb3b3;
+            }
+
+    /* دکمه اعمال */
+    .search-btn {
+        height: 42px;
+        width: 120px;
+        background: #ff8282;
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+        .search-btn:hover {
+            background: #ff5c5c;
+        }
+
+    .status-done .task-status-bar {
+        background-color: #4CAF50 !important;
+    }
+
+    .status-inprogress .task-status-bar {
+        background-color: #2196F3 !important;
+    }
+
+    .status-overdue .task-status-bar {
+        background-color: #E53935 !important;
+    }
 </style>
+
+<link rel="stylesheet" href="~/css/search-filter.css">
+
+<div class="search-container">
+    <form method="get" class="search-box">
+
+        <input type="text"
+               name="search"
+               value="@ViewBag.Search"
+               placeholder="جستجو بر اساس عنوان یا دسته‌بندی" />
+
+        <select name="sort">
+            <option value="">مرتب‌سازی</option>
+            <option value="title" selected="@(ViewBag.Sort == "title")">بر اساس عنوان</option>
+            <option value="date" selected="@(ViewBag.Sort == "date")">بر اساس تاریخ سررسید</option>
+            <option value="status" selected="@(ViewBag.Sort == "status")">بر اساس وضعیت</option>
+        </select>
+
+        <button type="submit" class="search-btn">اعمال</button>
+    </form>
+</div>
+
 
 <div class="form-card">
     <div class="form-title">فهرست کارها</div>
 
     <a asp-action="Create">
-        <button>➕ افزودن کار جدید</button>
+        <button class="add-task-btn">➕ افزودن کار جدید</button>
     </a>
 
     <hr />
 
-    @if (Model.Count == 0)
+    @if (Model == null || Model.Count == 0)
     {
         <p>هیچ کاری ثبت نشده است.</p>
     }
@@ -117,27 +225,44 @@
     {
         @foreach (var item in Model)
         {
-            string statusClass;
+            string statusClass = "";
+
+            bool isOverdue = item.DueDate.HasValue && item.DueDate.Value < DateTime.Today;
 
             if (item.Status == ToDoStatus.Done)
             {
-                statusClass = "status-done"; 
+                // انجام شده = همیشه سبز
+                statusClass = "status-done";
             }
-            else if (item.DueDate.HasValue && item.DueDate.Value < DateTime.Now)
+            else if (item.Status == ToDoStatus.Inprogress)
             {
-                statusClass = "status-overdue"; 
+                if (isOverdue)
+                    statusClass = "status-overdue";   // آبی → قرمز تغییر می‌کنه چون زمان گذشته
+                else
+                    statusClass = "status-inprogress";  // آبی
             }
-            else
+            else // NotDone
             {
-                statusClass = "status-inprogress"; 
+                if (isOverdue)
+                    statusClass = "status-overdue";     // قرمز
+                else
+                    statusClass = "";                   // بدون رنگ
             }
-            
-            // 2. ساختار HTML اصلاح شده:
+
+
             <div class="task-item @statusClass">
-                <div class="task-status-bar"></div> <div class="task-content">
+                <div class="task-status-bar"></div>
+
+                <div class="task-content">
                     <strong>@item.Title</strong><br />
-                    <small>@item.CategoryName | تاریخ: @(item.DueDate?.ToString("yyyy/MM/dd"))</small><br />
-                    <p>@item.Description</p>
+                    <small>
+                        @item.CategoryName |
+                        تاریخ: @(item.DueDate?.ToString("yyyy/MM/dd"))
+                    </small>
+                    @if (!string.IsNullOrWhiteSpace(item.Description))
+                    {
+                        <p>@item.Description</p>
+                    }
                 </div>
 
                 <div class="task-actions">

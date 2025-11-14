@@ -16,15 +16,20 @@ namespace WebToDoList.Controllers
             _categoryService = categoryService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string? search, string? sort)
         {
             var userId = HttpContext.Session.GetInt32("UserId");
             if (userId == null)
                 return RedirectToAction("Login", "Account");
 
-            var items = _todoService.GetUserItems(userId.Value);
+            var items = _todoService.Filter(userId.Value, search, sort);
+
+            ViewBag.Search = search;
+            ViewBag.Sort = sort;
+
             return View(items);
         }
+
 
         [HttpGet]
         public IActionResult Create()
@@ -55,6 +60,24 @@ namespace WebToDoList.Controllers
         public IActionResult Delete(int id)
         {
             _todoService.DeleteItem(id);
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var item = _todoService.GetItemById(id);
+            if (item == null)
+                return NotFound();
+
+            ViewBag.Categories = _categoryService.GetAllCategories();
+            return View(item);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(ToDoItemDto model)
+        {
+            var updated = _todoService.UpdateStatus(model.Id, model.Status);
             return RedirectToAction("Index");
         }
     }

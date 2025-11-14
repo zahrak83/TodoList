@@ -38,6 +38,12 @@ namespace ToDoList.Domain.Service
         {
             return _toDoRepo.Delete(id);
         }
+
+        public List<ToDoItemDto> Filter(int userId, string? search, string? sort)
+        {
+            return _toDoRepo.Filter(userId, search, sort);
+        }
+
     }
 }
 

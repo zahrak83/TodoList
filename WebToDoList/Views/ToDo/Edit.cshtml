@@ -1,0 +1,32 @@
+﻿@model ToDoList.Domain.Core.Dtos.ToDoItemDto
+
+<div class="form-card">
+    <div class="form-title">ویرایش کار</div>
+
+    <form method="post">
+
+        <input type="hidden" asp-for="Id" />
+
+        <div class="form-group">
+            <label>عنوان:</label>
+            <input asp-for="Title" disabled />
+        </div>
+
+        <div class="form-group">
+            <label>توضیحات:</label>
+            <textarea asp-for="Description" disabled></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>تاریخ سررسید:</label>
+            <input asp-for="DueDate" type="date" disabled />
+        </div>
+
+        <div class="form-group">
+            <label>وضعیت:</label>
+            <select asp-for="Status" asp-items="Html.GetEnumSelectList<ToDoList.Domain.Core.Enums.ToDoStatus>()"></select>
+        </div>
+
+        <button type="submit" class="task-btn edit">ثبت تغییرات</button>
+    </form>
+</div>
